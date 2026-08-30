@@ -159,3 +159,60 @@ Illutrated Example : [Click](InteractiveEditor/InteractiveTextEditor.java)
 
 #### Questions 8 : What happens when the JVM has only daemon threads remaining?
 When the JVM has only daemon threads remaining, the JVM terminates automatically and the program exits.That's why we use the Daemon thread in the background purposed because it will automatically gets killed once all the main/ non-daemon threads get killed.
+
+#### Question 9 : What are the no of ways we can create threads in Java ?
+There are many ways to create threads in Java, but the most common ones are:
+1. Extending the Thread class: You can create a new class that extends the Thread class and override its run() method.
+   Then, you can create an instance of that class and call its
+   start() method to start the thread. This approach is simple and straightforward, 
+   but it has some limitations, such as not being able to extend any other class.
+2. Implementing the Runnable interface: You can create a new class that implements the Runnable interface and 
+   override its run() method. Then, you can create an instance of that class and pass it to a Thread object,
+   which you can start by calling its start() method. This approach allows you to extend other classes and is
+   more flexible than extending the Thread class.
+3. Using the Executor framework: You can use the Executor framework to manage threads and tasks. 
+   This approach provides a higher-level abstraction for managing threads and allows you to easily create thread pools,
+   schedule tasks, and handle exceptions. It is recommended for most applications that require concurrent programming.
+4. Using the Fork/Join framework: You can use the Fork/Join framework to parallelize tasks that can be broken down into smaller sub-tasks. 
+   This approach is useful for tasks that can be divided into smaller parts and executed concurrently, such as sorting or searching large datasets.
+5. Using the CompletableFuture class: You can use the CompletableFuture class to create asynchronous tasks that can be executed in parallel. 
+   This approach allows you to chain multiple tasks together and handle exceptions in a more functional programming style.
+
+#### Question 10 : How we can get back results from the Callable with Future with ExecutorService instead of just performing tasks concurrently ? 
+
+With `Runnable`, a task does not return a result because its `run()` method has a `void` return type. When we need to execute multiple tasks concurrently and collect their results, we can use `Callable<T>`, whose `call()` method returns a value.
+
+We can submit multiple `Callable` tasks to an `ExecutorService`, obtain a `Future<T>` for each task, wait for their results, and then combine those results to produce the final response.
+
+This is useful for scenarios such as calling multiple independent APIs concurrently, aggregating their responses, and then returning a single combined result.
+
+The overall flow is:
+
+`Callable tasks → ExecutorService → Future results → Aggregate results → Final response`
+
+This approach can improve performance when the operations are independent because they can execute concurrently rather than sequentially.
+```
+ExecutorService executor =
+        Executors.newFixedThreadPool(3);
+
+List<Callable<String>> tasks = List.of(
+
+    () -> {
+        Thread.sleep(2000);
+        return "User Data";
+    },
+
+    () -> {
+        Thread.sleep(3000);
+        return "Order Data";
+    },
+
+    () -> {
+        Thread.sleep(1000);
+        return "Payment Data";
+    }
+);
+
+List<Future<String>> futures =
+        executor.invokeAll(tasks);
+```

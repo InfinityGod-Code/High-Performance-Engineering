@@ -1,6 +1,7 @@
 package Java.InterviewPrep.Fundamentals;
 
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /*
 No of ways we can create threads and their differences
@@ -37,6 +38,7 @@ class ThreadExtendExample extends Thread {
     }
 }
 
+
 public class Fundamentals {
     public static void main(String[] args) {
         System.out.println("Starting fundamentals example...");
@@ -47,5 +49,18 @@ public class Fundamentals {
         // Create a thread by extending the Thread class
         ThreadExtendExample threadExtend = new ThreadExtendExample();
         threadExtend.start();
+
+        // Executor framework example
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        Runnable task1 = () -> {
+            System.out.println("Task 1 is running in the executor service.");
+        };
+        Runnable task2 = () -> {
+            System.out.println("Task 2 is running in the executor service.");
+        };
+        executorService.submit(task1);
+        executorService.submit(task2);  
+        
+        executorService.shutdown(); // Shutdown the executor service after tasks are completed
     }
 }
