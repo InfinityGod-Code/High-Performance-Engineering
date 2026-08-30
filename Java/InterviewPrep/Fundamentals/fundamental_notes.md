@@ -216,3 +216,53 @@ List<Callable<String>> tasks = List.of(
 List<Future<String>> futures =
         executor.invokeAll(tasks);
 ```
+OR 
+```
+import java.util.concurrent.*;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+
+        ExecutorService executor =
+                Executors.newFixedThreadPool(3);
+
+        Callable<String> userTask = () -> {
+            Thread.sleep(2000);
+            return "User Data";
+        };
+
+        Callable<String> orderTask = () -> {
+            Thread.sleep(3000);
+            return "Order Data";
+        };
+
+        Callable<String> paymentTask = () -> {
+            Thread.sleep(1000);
+            return "Payment Data";
+        };
+
+        Future<String> userFuture =
+                executor.submit(userTask);
+
+        Future<String> orderFuture =
+                executor.submit(orderTask);
+
+        Future<String> paymentFuture =
+                executor.submit(paymentTask);
+
+        // Get results
+        String user = userFuture.get();
+        String orders = orderFuture.get();
+        String payments = paymentFuture.get();
+
+        System.out.println(user);
+        System.out.println(orders);
+        System.out.println(payments);
+
+        executor.shutdown();
+    }
+}
+```
+
+#### Question 11 : When should I use CompletableFuture over Future in Java? Can you provide code examples showing how both handle async task composition and exception handling?
