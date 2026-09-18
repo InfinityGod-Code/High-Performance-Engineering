@@ -264,5 +264,3 @@ public class Main {
     }
 }
 ```
-
-#### Question 11 : When should I use CompletableFuture over Future in Java? Can you provide code examples showing how both handle async task composition and exception handling?
