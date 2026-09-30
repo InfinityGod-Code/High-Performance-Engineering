@@ -23,3 +23,36 @@ task second {
 Points to Ponder : 
 - We must keep in mind that Gradle scripts use Groovy. This means that we can use all the Groovy's good stuff in our scripts. 
 - Groovy constructs can also be used in Gradle scripts.
+
+#### 2.0 Dependancies in tasks
+In Gradle, we can add task dependencies with the dependsOn method for a task. We can specify a task name as the String value or task object as the argument. We can even specify more than one task name or object to specify multiple task dependencies.
+
+```
+tasks.register("first") {
+    doLast {
+        println("Run ${name}")
+    }
+}
+
+tasks.register("second") {
+    dependsOn("first")
+
+    doLast {
+        println("Run ${name}")
+    }
+}
+```
+When we run the script, we see that the first task is executed before the second task:
+```
+gradle second - Groovy
+./gradlew second - Kotlin
+```
+
+Note : In order to run the gradle kotlin we need to have the gradle wrapper, so if gradle is installed in machine we first have to run : 
+```
+gradle wrapper
+./gradlew <task-name>
+```
+Reference : In the example2 folder we have two folders : Groovy and Kotlin.Check for examples.
+
+#### 3.0 Dependancies in tasks
