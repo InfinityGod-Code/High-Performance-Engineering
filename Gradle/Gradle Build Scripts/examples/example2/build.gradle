@@ -1,0 +1,15 @@
+task taskOne {
+    doFirst {
+        task -> println("Running : ${task.name}")
+        sleep(1000) // Simulating a long-running task
+    }
+}
+
+task taskTwo {
+    doFirst {
+        task -> println("Running : ${task.name}")
+        sleep(1000) // Simulating a long-running task
+    }
+}
+
+taskOne.dependsOn taskTwo

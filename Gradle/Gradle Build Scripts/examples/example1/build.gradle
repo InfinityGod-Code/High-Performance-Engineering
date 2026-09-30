@@ -1,0 +1,12 @@
+// This is a simple build script that defines a single task called "firstTask".
+// When this task is executed, it will print a message indicating that it is running.
+
+// Actions in Gradle are defined using the "doFirst" or "doLast" methods, which specify what 
+// should happen before or after the task's main action. 
+// In this case, we are using "doFirst" to print a message before the task executes.
+task firstTask{
+    doFirst{
+        task -> println("Running : ${task.name}")
+    }
+}
+

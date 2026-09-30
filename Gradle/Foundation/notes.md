@@ -84,3 +84,96 @@ Note :
 - The << operator means leftShift(), which was removed from modern Gradle.
 - doLast {} means "execute this code when the task runs."
 - "<<" is replaced with doLast {}.
+- Run the task with command gradle <task-name> here : "helloWorld".
+
+
+#### Gradle Daemon 
+Gradle Daemon is a long-running Gradle process that stays in the background and is reused across builds.the Gradle daemon later, but it essentially keeps Gradle running in memory so that we don't get the penalty of starting the JVM each time we run Gradle. This drastically speeds up the execution of tasks.
+Without Daemon:
+```
+./gradlew build
+   ↓
+Start Gradle
+   ↓
+Build
+   ↓
+Stop Gradle
+```
+
+With Daemon : 
+```
+First build
+   ↓
+Start Gradle Daemon
+   ↓
+Build
+   ↓
+Daemon stays running
+
+Next build
+   ↓
+Reuse existing Daemon
+   ↓
+Build faster
+```
+
+## 2.0 Default Gradle tasks
+We can create our simple build script with one task. We can ask Gradle to show us the available tasks for our project. Gradle has several built-in tasks that we can execute. We type gradle -q tasks to see the tasks for our project:
+
+The properties task is very useful to see the properties available for our project. We haven't defined any property ourselves in the build script, but Gradle provides a lot of built-in properties. The following output shows some of the properties:
+```
+gradle -q properties
+```
+The dependencies task will show dependencies (if any) for our project. Our first project doesn't have any dependencies, as the output shows when we run the task:
+```
+gradle -q dependencies
+```
+The projects tasks will display subprojects (if any) for a root project. Our project doesn't have any subprojects. Therefore, when we run the projects task, the output shows us our project has no subprojects:
+```
+gradle -q projects
+```
+The model tasks displays information about the model that Gradle builds internally from our project build file. This feature is incubating, which means that the functionality can change in future versions of Gradle.The model task shows how Gradle internally understands your project after reading your build.gradle.
+```
+gradle -q model
+```
+
+### 2.1 : Task name abbreviation
+We can also abbreviate each word in a CamelCase task name. For example, our helloWorld task name can be abbreviated to hW:
+
+```
+$ gradle -q hW
+Hello world.
+```
+
+## 3.0 Gradle Performance GUI Options
+#### 3.1 : Profiling 
+Think of --profile as Gradle's build performance report.Gradle also provides the --profile command-line option. This option records the time that certain tasks take to complete. The data is saved in an HTML file in the build/reports/profile directory. We can open this file in a web browser and check the time taken for several phases in the build process.
+```
+./gradlew build --profile
+```
+Gradle will:
+
+Run your build.
+Measure how long different tasks/phases take.
+Generate an HTML report.
+Save it under:
+```
+build/reports/profile/
+```
+Open that HTML file in your browser and you'll see information like:
+```
+Task              Time
+-----------------------
+compileJava       2.1s
+test              8.4s
+processResources  0.5s
+jar               1.2s
+```
+
+#### 3.2 : Understanding the Gradle graphical user interface
+Finally, we take a look at the --gui command-line option. With this option, we start a graphical shell for our Gradle builds. Until now, we used the command line to start a task. With the Gradle GUI, we have a graphical overview of the tasks in a project and we can execute them by simply clicking on the mouse.
+
+To start the GUI, we invoke the following command:
+```
+gradle --gui
+```
