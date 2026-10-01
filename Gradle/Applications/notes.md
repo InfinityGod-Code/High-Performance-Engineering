@@ -79,3 +79,96 @@ In addition to tasks, the plugin injects a **Convention Object** into the projec
 ## Key Takeaway
 
 > Tasks perform the actions (compiling, testing, packaging), while the **Convention Object** holds the configuration parameters that dictate *how* those tasks execute.
+
+## 2. Directory Layout Conventions ("Convention over Configuration")
+
+The Java plugin relies on standard directory structures. Following these conventions eliminates the need to write custom directory-mapping code in `build.gradle`.
+
+| Directory | Purpose |
+| :--- | :--- |
+| `src/main/java` | Production Java source files |
+| `src/main/resources` | Production configuration files (e.g., `.properties`, `.xml`) included in the output JAR |
+| `src/test/java` | Test source code (e.g., JUnit, TestNG tests) |
+| `src/test/resources` | Resources required strictly for test execution |
+
+> **Best Practice:** While directory conventions can be overridden via source sets, sticking to the standard layout minimizes boilerplate build code and reduces configuration errors.
+
+---
+
+## 3. Sample Project Directory Structure
+
+Below is a typical project structure utilizing localized messages via a resource bundle:
+
+```text
+my-project/
+├── build.gradle
+└── src/
+    └── main/
+        ├── java/
+        │   └── gradle/
+        │       └── sample/
+        │           └── Sample.java          # Uses ResourceBundle to load messages
+        └── resources/
+            └── gradle/
+                └── sample/
+                    └── messages.properties  # welcome = Welcome to Gradle!
+```
+
+---
+
+## 4. Lifecycle Tasks and Task Dependencies
+
+In Gradle, tasks can either perform direct execution work or act as **Lifecycle Tasks** that aggregate other tasks.
+
+### The `classes` Task
+* **Type:** Lifecycle Task (does not perform compilation directly).
+* **Role:** Serves as an umbrella task to assemble all compiled source classes and processed resource files.
+* **Dependencies:**
+  * `compileJava` – Compiles `.java` files in `src/main/java` to `.class` files.
+  * `processResources` – Copies and processes non-code assets from `src/main/resources` to the output destination.
+
+```text
+               +-------------------+
+               |   classes task    |
+               | (Lifecycle Task)  |
+               +---------+---------+
+                         |
+           +-------------+-------------+
+           |                           |
+           v                           v
++--------------------+      +----------------------+
+|    compileJava     |      |   processResources   |
+| (Compiles .java)   |      | (Copies resources)   |
++--------------------+      +----------------------+
+```
+
+### Inspecting Task Dependencies
+To inspect task dependencies and see how lifecycle tasks assemble smaller tasks, run:
+```bash
+gradle tasks --all
+```
+
+**Mental Model** : We use the gradle wrapper to create gradle based setup first for that we must have gradle installed in our machine and once we have that we can now other don't need to install the gradle because gradle wrapper makes it system independant and now others can simply use this.
+Before running gradle wrapper there must be build.gradle or build.gradle.kts must be present.
+
+### Java Plugin: Source Sets
+
+#### What is a Source Set?
+* A **source set** is a collection of source files (Java files or resources) compiled and executed together.
+* Allows grouping files with a specific purpose (e.g., separating API files) without creating a separate project.
+* Enables running tasks targeting specific file groups.
+
+#### Default Source Sets
+By default, the Java plugin provides two source sets:
+* `main`
+* `test`
+
+#### Automatically Generated Tasks
+For every source set, the plugin creates three tasks:
+1. `compile<SourceSet>Java`
+2. `process<SourceSet>Resources`
+3. `<SourceSet>Classes`
+
+#### Naming Convention
+* **`main` Source Set:** The name is omitted from task commands (e.g., `compileJava`).
+* **Other Source Sets:** The name is explicitly included (e.g., `compileTestJava` for the `test` source set).
