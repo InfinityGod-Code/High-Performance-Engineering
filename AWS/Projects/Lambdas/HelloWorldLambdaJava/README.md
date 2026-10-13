@@ -5,7 +5,7 @@ Creates and deploys a "Hello World" AWS Lambda function, implemented in Java.
 ## Prerequisites
 
 * Created: An AWS account, and an S3 bucket for storing temporary deployment artifacts (referred to as $CF_BUCKET below)
-* Installed: AWS CLI, Maven, SAM CLI
+* Installed: Java 21, Maven, AWS CLI, SAM CLI
 * Configured: AWS credentials in your terminal
 
 ## Usage
@@ -13,7 +13,7 @@ Creates and deploys a "Hello World" AWS Lambda function, implemented in Java.
 To build:
 
 ```
-$ mvn package
+$ sam build
 ```
 
 To deploy:
