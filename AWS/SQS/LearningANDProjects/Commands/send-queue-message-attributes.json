@@ -1,0 +1,15 @@
+{
+    "QueueUrl": "https://sqs.us-east-1.amazonaws.com/866731631301/que",
+    "MessageBody": "test message body",
+    "DelaySeconds": 9,
+    "MessageAttributes": {
+        "attribute1": {
+            "DataType": "String",
+            "StringValue": "value1"
+        },
+        "attribute2": {
+            "DataType": "String",
+            "StringValue": "value2"
+        }
+    }
+}
